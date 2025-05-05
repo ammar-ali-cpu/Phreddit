@@ -6,6 +6,7 @@ import Header from "./components/header.js"
 import ContentPlusNav from "./components/contentPlusNav.js";
 import Phreddit from './components/phreddit.js'
 import WelcomePage from "./components/welcomePage.js";
+import { UserProvider } from './components/UserContext';
 
 function App() {
   const [currentPage, setCurrentPage] = useState("homePage");
@@ -18,9 +19,11 @@ function App() {
     //   <hr className="solid"></hr>
     //   <ContentPlusNav currentPage={currentPage} setCurrentPage={setCurrentPage} searchTerm={searchTerm}/>
     // </section>
-    <section>
-      <WelcomePage/>
-    </section>
+    <UserProvider>
+      <section>
+        <WelcomePage/>
+      </section>
+    </UserProvider>
   );
 }
 

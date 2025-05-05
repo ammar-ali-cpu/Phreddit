@@ -684,4 +684,17 @@ color: red;
   background-color: red;
 
 }
-  
+
+.registrationForm label{
+  font-weight: bold;
+}
+
+.registrationForm input{
+  padding: 4px;
+  width: 300px;
+}
+
+.registrationForm td {
+  padding: 10px;
+  vertical-align: middle;
+}
