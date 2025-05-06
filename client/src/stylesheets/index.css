@@ -110,6 +110,64 @@ code {
   width: auto;
 }
 
+.userProfileB{
+  background-color: #f1f1f1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  justify-content: flex-end;
+  display: flex;
+  margin-right: 20px;
+  transform: background 0.25s;
+  margin-top: 10px;
+}
+.userProfileB:hover{
+  background-color: #FF4433;
+}
+
+.userProfileButton{
+  outline: none;
+  border: none;
+  text-align: center;
+  background: transparent;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+  width: auto;
+}
+
+.logout{
+  background-color: #f1f1f1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  justify-content: flex-end;
+  display: flex;
+  margin-right: 20px;
+  transform: background 0.25s;
+  margin-top: 10px;
+}
+.logout:hover{
+  background-color: #FF4433;
+}
+
+.logoutButton{
+  outline: none;
+  border: none;
+  text-align: center;
+  background: transparent;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+  width: auto;
+}
+
+.headerButtons{
+  display: flex;
+  gap: 10px; 
+  align-items: center;
+}
+
 hr.solid{
   border-top: 1px solid #000000;
   width: 100%;
