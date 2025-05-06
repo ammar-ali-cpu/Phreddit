@@ -10,6 +10,7 @@ const Post = require('./models/posts');
 const Comment = require('./models/comments');
 const Flair = require('./models/linkflairs');
 const Users = require('./models/users')
+const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
 
 
@@ -196,6 +197,60 @@ app.post('/posts/incrementViews/:id', async (req, res) => {
       res.status(500).json({ error: "Server error" });
     }
   });
+
+app.post('/users', async (req, res) => {
+    try {
+        const { firstName, lastName, displayName, email, password } = req.body;
+
+        const saltRounds = 10;
+        const salt = await bcrypt.genSalt(saltRounds);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        const user = new Users({ firstName, lastName, displayName, email, passwordHash, reputation:100});
+        const saved = await user.save();
+        res.status(201).json(saved);
+    } catch (err) {
+        console.error("User registration error:", err);
+        res.status(500).json({error: "Failed to register user."});
+    }
+});
+
+app.post('/users/check-email-and-display', async (req, res) => {
+    const { email, displayName } = req.body;
+
+    try {
+        const emailExists = await Users.findOne({ email });
+        const displayNameExists = await Users.findOne({ displayName });
+        return res.json({
+            emailExists: emailExists !== null,
+            displayNameExists: displayNameExists !== null
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error checking for email/displayName.' });
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const {email, password} = req.body;
+
+    try{
+        const user = await Users.findOne({email});
+        if (!user) {
+            console.log('No account with that email.');
+            return res.status(400).json({error: "No account with that email." });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!isMatch) {
+            return res.status(401).json({ error: "Incorrect password." });
+        }
+        const {passwordHash, ...userMinusPass} = user.toObject();
+        res.status(200).json(userMinusPass);
+    } catch (err) {
+        res.status(500).json({ error: "Server error during login." });
+    }
+});
 
 
 
