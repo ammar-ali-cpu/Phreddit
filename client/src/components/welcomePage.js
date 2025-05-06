@@ -193,6 +193,15 @@ export default function WelcomePage() {
             </section>
         );
     }
+    else if (mode === "guest") {
+        return (
+            <section className="phreddit">
+                <Header currentPage={currentPage} setCurrentPage={setCurrentPage} setSearchTerm={setSearchTerm} />
+                <hr className="solid" />
+                <ContentPlusNav currentPage={currentPage} setCurrentPage={setCurrentPage} searchTerm={searchTerm}/>
+            </section>
+        );
+    }
 
 
     return (
@@ -200,7 +209,7 @@ export default function WelcomePage() {
         <h2>Welcome to Phreddit!</h2>
         <button onClick={() => setMode("login")}>Log in</button>
         <button onClick={() => setMode("register")}>Register</button>
-        <button>Continue as Guest</button>
+        <button onClick={() => setMode("guest")}>Continue as Guest</button>
     </div>
   );
 }
