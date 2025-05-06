@@ -57,21 +57,23 @@ const Header = ({ currentPage, setCurrentPage, setSearchTerm }) => {
       <div className='headerButtons'>
         <div className='userProfileB'>
           <button type="button" className="userProfileButton">
-            {user?.username ?? "User"}
+            {user?.username ?? "Guest"}
           </button>
         </div>
 
-        <div className={`createPost ${currentPage === "createPostPage" ? "activeButton" : ""}`}>
-          <button type="button" className="createPostButton"  onClick={() => setCurrentPage("createPostPage")}>
+        <div className={`createPost ${currentPage === "createPostPage" ? "activeButton" : ""} ${user.role === 'guest' ? 'guest-disabled' : ''}`}>
+          <button type="button" className='createPostButton'  onClick={() => user.role !== 'guest' && setCurrentPage("createPostPage")}>
             Create Post
           </button>
         </div>
 
+        {user.role !== 'guest' && (
         <div className='logout' >
           <button type="button" className="logoutButton" onClick={handleLogout}>
             Logout
           </button>
         </div>
+        )}
       </div>
     </div>    
   );
