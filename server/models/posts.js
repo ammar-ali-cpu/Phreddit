@@ -42,7 +42,7 @@ const postSchema = new Schema({
     votes:{
         type: Number,
         required: true,
-        //default: 0
+        default: 0
     },
     communityID:{
         type: Schema.Types.ObjectId,

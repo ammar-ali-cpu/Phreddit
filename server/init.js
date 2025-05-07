@@ -86,6 +86,9 @@ const displayName = displayNameArg || 'Admin';
 const email = emailArg || 'admin@gmail.com';
 const password = passwordArg || 'password123';
 
+let admin;
+
+
 async function init() {
   try {
     await mongoose.connect(MONGODB_URI, {
@@ -94,12 +97,12 @@ async function init() {
     });
 
     // Create admin user if doesn't exist
-    const existing = await Users.findOne({ email });
-    if (existing) {
+    admin = await Users.findOne({ email });
+    if (admin) {
       console.log('User with this email already exists.');
     } else {
       const passwordHash = await bcrypt.hash(password, 10);
-      const user = new Users({
+      admin = new Users({
         firstName,
         lastName,
         displayName,
@@ -108,7 +111,7 @@ async function init() {
         reputation: 1000, // default for admin
         isAdmin: true
       });
-      await user.save();
+      await admin.save();
       console.log('Admin user created successfully.');
     }
 
@@ -291,6 +294,7 @@ let postRef2 = await createPost(post2);
     startDate: new Date('August 10, 2014 04:18:00'),
     members: ['rollo', 'shemp', 'catlady13', 'astyanax', 'trucknutz69'],
     memberCount: 4,
+    createdBy: admin._id,
 };
 const community2 = { // community object 2
     communityID: 'community2',
@@ -300,6 +304,7 @@ const community2 = { // community object 2
     startDate: new Date('May 4, 2017 08:32:00'),
     members: ['MarcoArelius', 'astyanax', 'outtheretruth47', 'bigfeet'],
     memberCount: 4,
+    createdBy: admin._id,
 };
 let communityRef1 = await createCommunity(community1);
 let communityRef2 = await createCommunity(community2);
