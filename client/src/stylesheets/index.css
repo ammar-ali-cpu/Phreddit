@@ -239,11 +239,31 @@ hr.solidLine{
   background-color: #FF4433;
 }
 
+.createComButton{
+  margin-bottom: 12px;
+}
+
+.createComButton.guest-disabled {
+  background-color: #f1f1f1; 
+  cursor: not-allowed;
+  pointer-events: none; 
+}
+
+/* .createComButton.guest-disabled:hover {
+  background-color: #f1f1f1; 
+  cursor: not-allowed;
+  pointer-events: none; 
+} */
+
 #comsHeader{
   font-size: 16px;
   margin-top: 1px;
   text-align: left;
   width: 100%;
+}
+
+.joinedCommunities{
+  margin-top: 5px;
 }
 
 .allPosts{
@@ -283,6 +303,10 @@ button.apbuttons:hover{
   margin-top: 0px;
   padding: 0 2px;
   font-size: 12px;
+}
+
+.postSectionHeader{
+  margin-bottom: 5px;
 }
 
 .communityList{

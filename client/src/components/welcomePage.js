@@ -94,7 +94,8 @@ export default function WelcomePage() {
             const userInfo = {
                 username: response.data.displayName, 
                 role: response.data.isAdmin || 'user',
-                userId: response.data.id 
+                userId: response.data.id, 
+                joinedCommunities: response.data.joinedCommunities
             };
 
             console.log("Login successful:", response.data);
