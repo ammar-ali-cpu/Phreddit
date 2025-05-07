@@ -76,16 +76,16 @@ useEffect(() => {
     <div className='communityPage'>
       <div className='communityTop'>
         <h3 className="communityName" >{community?.name}</h3>
-        <div class="allPostButtons">
-          <button class="apbuttons" id="Newest">Newest</button>
-          <button class="apbuttons" id="Oldest">Oldest</button>
-          <button class="apbuttons" id="Active">Active</button>
+        <div className="allPostButtons">
+          <button className="apbuttons" id="Newest">Newest</button>
+          <button className="apbuttons" id="Oldest">Oldest</button>
+          <button className="apbuttons" id="Active">Active</button>
         </div>
       </div>
       <div className='communityDescription' dangerouslySetInnerHTML={{ __html: community?.description }} />
       <p className='communityPageDateAndCount'>Created {formatTimeStamp(community?.startDate)}</p>
       <p className='communityPageDateAndCount'>{community?.postIDs.length} Posts  &nbsp;&nbsp;&nbsp;&nbsp; {community?.memberCount} Members</p>
-      <hr class="solid"></hr>
+      <hr className="solid"></hr>
       <PostList posts={posts} com={'yes'} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
     </div>
    

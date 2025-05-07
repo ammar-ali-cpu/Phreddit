@@ -12,6 +12,7 @@ export function UserProvider({ children }) {
       role: 'guest', //  'guest' | 'user' | 'admin'
       username: null,
       userId: null,
+      joinedCommunities: [],
     });
     const login = (userData) => {
         setUser({
@@ -19,6 +20,7 @@ export function UserProvider({ children }) {
           role: userData.role,
           username: userData.username,
           userId: userData.userId,
+          joinedCommunities: userData.joinedCommunities || [],
         });
       };
     
@@ -28,6 +30,7 @@ export function UserProvider({ children }) {
           role: 'guest',
           username: null,
           userId: null,
+          joinedCommunities: [],
         });
       };
     
