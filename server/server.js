@@ -130,6 +130,15 @@ app.get("/comments", async (req, res) => {
     }
 })
 
+app.get("/users", async (req, res) => {
+    try {
+        const users = await Users.find();
+        res.json(users);
+    } catch (error) {
+        console.log("Server side problem loading users for communityPage")
+    }
+})
+
 
 app.post("/comments", async (req, res) => {
     try {
@@ -230,6 +239,19 @@ app.post('/users/check-email-and-display', async (req, res) => {
         return res.status(500).json({ message: 'Error checking for email/displayName.' });
     }
 });
+
+app.get('/users/:id', async (req, res) => {
+    try {
+      const user1 = await Users.findById(req.params.id).select('displayName');
+      if (!user1) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user1);
+    } catch (err) {
+      console.error('Error fetching user:', err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
 
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
