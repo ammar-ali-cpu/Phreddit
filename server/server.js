@@ -276,17 +276,18 @@ app.post('/login', async (req, res) => {
 
 app.post('/communities/:id/join', async (req, res) => {
     const {id: commID} = req.params;
-    const {userID} = req.body;
+    const {userId} = req.body;
+    console.log("Joining community. User ID:", userId);
 
     try{
         await Community.findByIdAndUpdate(
-            commID, {$addToSet: { members: userID }, $inc: { memberCount: 1 }}, {new: true}
+            commID, {$addToSet: { members: userId }, $inc: { memberCount: 1 }}, {new: true}
         );
 
-        await Users.findByIdAndUpdate(
-            userID, {$addToSet: {joinedCommunities: commID}}, {new: true}
+        const updatedUser= await Users.findByIdAndUpdate(
+            userId, {$addToSet: {joinedCommunities: commID}}, {new: true}
         )
-
+        console.log("Updated user:", updatedUser);
         res.status(200).json({message: 'sucessfully joined community'})
     }
     catch(error){
@@ -297,15 +298,15 @@ app.post('/communities/:id/join', async (req, res) => {
 
 app.post('/communities/:id/leave', async (req, res) => {
     const {id: commID} = req.params;
-    const {userID} = req.body;
+    const {userId} = req.body;
 
     try{
         await Community.findByIdAndUpdate(
-            commID, {$pull: { members: userID }, $inc: { memberCount: -1 }}, {new: true}
+            commID, {$pull: { members: userId }, $inc: { memberCount: -1 }}, {new: true}
         );
 
         await Users.findByIdAndUpdate(
-            userID, {$pull: {joinedCommunities: commID}}, {new: true}
+            userId, {$pull: {joinedCommunities: commID}}, {new: true}
         )
 
         res.status(200).json({message: 'sucessfully left community'})
