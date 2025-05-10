@@ -142,6 +142,7 @@ export default function CreatePostPage({ communities, setCurrentPage }) {
 
      
     setCurrentPage(`postPage:${post._id}`);
+    console.log('created')
     
 } catch (er) {
     console.log("Client side problem with posts")

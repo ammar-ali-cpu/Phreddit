@@ -28,7 +28,11 @@ const communitiesSchema = new Schema({
     },
     members:[{
         type: String
-    }]
+    }],
+    createdBy:{
+        type: Schema.Types.ObjectId, 
+        ref: 'Users'
+    }
 },
 {
     toJSON: { virtuals: true },

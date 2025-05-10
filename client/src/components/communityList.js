@@ -1,19 +1,19 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
-export default function CommunityList({currentPage, setCurrentPage}) 
+export default function CommunityList({communities, currentPage, setCurrentPage}) 
 {
-  const [communities, setCommunities] = useState([]);
+  //const [communities, setCommunities] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8000/communities")
-        .then(response => {
-            setCommunities(response.data);
-        })
-        .catch(err => {
-            console.log("Community list load failed");
-        });
-}, []);
+//   useEffect(() => {
+//     axios.get("http://127.0.0.1:8000/communities")
+//         .then(response => {
+//             setCommunities(response.data);
+//         })
+//         .catch(err => {
+//             console.log("Community list load failed");
+//         });
+// }, []);
 
 
   return (

@@ -39,6 +39,17 @@ const postSchema = new Schema({
         required: true,
         default: 0
     },
+    votes:{
+        type: Number,
+        required: true,
+        default: 0
+    },
+    communityID:{
+        type: Schema.Types.ObjectId,
+        ref: 'Community',
+        //required: true,
+    },
+    
 },
 {
     toJSON: { virtuals: true },
