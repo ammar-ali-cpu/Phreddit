@@ -110,8 +110,8 @@ useEffect(() => {
           userId: user.userId,
         });
         // add user to communities member list, add community to users joined communities list
-        // setIsMember(true);
-        // login({ ...user, joinedCommunities: [...user.joinedCommunities, community._id] }); // update context
+        setIsMember(true);
+        login({ ...user, joinedCommunities: [...user.joinedCommunities, community._id] }); // update context
       } catch (err) {
         console.error("Error joining community", err);
       }
@@ -123,8 +123,8 @@ useEffect(() => {
           userId: user.userId,
         });
         // remove user to communities member list, remove community to users joined communities list
-        // setIsMember(false);
-        // login({ ...user, joinedCommunities: user.joinedCommunities.filter(id => id !== community._id) }); // update context
+        setIsMember(false);
+        login({ ...user, joinedCommunities: user.joinedCommunities.filter(id => id !== community._id) }); // update context
       } catch (err) {
         console.error("Error leaving community", err);
       }
