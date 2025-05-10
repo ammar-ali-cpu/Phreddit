@@ -91,17 +91,23 @@ export default function HomePage({setCurrentPage, selectedPost}) {
     <div id="postList"></div>
     {/* <PostList posts={posts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/> */}
     <div id="postList">
-      {joinedPosts.length > 0 && (
-        <>
-          <h4 className="postSectionHeader">Posts from My Communities</h4>
-          <PostList posts={joinedPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
-        </>
-      )}
-      <hr className="solid"/>
-      {otherPosts.length > 0 && (
-        <>
-          <h4 className="postSectionHeader">Other Posts</h4>
-          <PostList posts={otherPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+      {user?.role === "guest" ? (
+          <PostList posts={posts} setCurrentPage={setCurrentPage} selectedPost={selectedPost} />
+        ) : (
+          <>
+        {joinedPosts.length > 0 && (
+          <>
+            <h4 className="postSectionHeader">Posts from My Communities</h4>
+            <PostList posts={joinedPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+          </>
+        )}
+        <hr className="solid"/>
+        {otherPosts.length > 0 && (
+          <>
+            <h4 className="postSectionHeader">Other Posts</h4>
+            <PostList posts={otherPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+          </>
+        )}
         </>
       )}
     </div>
