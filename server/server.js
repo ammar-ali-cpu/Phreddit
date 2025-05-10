@@ -274,6 +274,48 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/communities/:id/join', async (req, res) => {
+    const {id: commID} = req.params;
+    const {userID} = req.body;
+
+    try{
+        await Community.findByIdAndUpdate(
+            commID, {$addToSet: { members: userID }, $inc: { memberCount: 1 }}, {new: true}
+        );
+
+        await Users.findByIdAndUpdate(
+            userID, {$addToSet: {joinedCommunities: commID}}, {new: true}
+        )
+
+        res.status(200).json({message: 'sucessfully joined community'})
+    }
+    catch(error){
+        console.error('Error joining community:', error);
+        res.status(500).json({ error: 'Failed to join community' });
+    }
+});
+
+app.post('/communities/:id/leave', async (req, res) => {
+    const {id: commID} = req.params;
+    const {userID} = req.body;
+
+    try{
+        await Community.findByIdAndUpdate(
+            commID, {$pull: { members: userID }, $inc: { memberCount: -1 }}, {new: true}
+        );
+
+        await Users.findByIdAndUpdate(
+            userID, {$pull: {joinedCommunities: commID}}, {new: true}
+        )
+
+        res.status(200).json({message: 'sucessfully left community'})
+    }
+    catch(error){
+        console.error('Error leaving community:', error);
+        res.status(500).json({ error: 'Failed to leave community' });
+    }
+});
+
 
 
 app.listen(8000, () => {console.log("Server listening on port 8000...");});
