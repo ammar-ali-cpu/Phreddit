@@ -232,7 +232,6 @@ app.get('/communities/:id', async (req, res) => {
     }
 })
 
-
   app.get("/comments/:commentid", async (req, res) => {
     
     try {
@@ -270,17 +269,6 @@ app.get('/communities/:id', async (req, res) => {
       console.error(err);
     }
   });
-
-app.get("/users", async (req, res) => {
-    try {
-        const users = await Users.find();
-        res.json(users);
-    } catch (error) {
-        console.log("Server side problem loading users for communityPage")
-    }
-})
-
-
 
 app.post("/comments", async (req, res) => {
     try {
@@ -391,19 +379,6 @@ app.post('/users/check-email-and-display', async (req, res) => {
     }
 });
 
-app.get('/users/:id', async (req, res) => {
-    try {
-      const user1 = await Users.findById(req.params.id).select('displayName');
-      if (!user1) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(user1);
-    } catch (err) {
-      console.error('Error fetching user:', err);
-      res.status(500).json({ message: 'Server error' });
-    }
-  });
-
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
 
@@ -422,49 +397,6 @@ app.post('/login', async (req, res) => {
       res.status(200).json({...rest,reputation,isAdmin,role: isAdmin ? 'admin' : 'user',createdAt});
     } catch (err) {
         res.status(500).json({ error: "Server error during login." });
-    }
-});
-
-app.post('/communities/:id/join', async (req, res) => {
-    const {id: commID} = req.params;
-    const {userId} = req.body;
-    console.log("Joining community. User ID:", userId);
-
-    try{
-        await Community.findByIdAndUpdate(
-            commID, {$addToSet: { members: userId }, $inc: { memberCount: 1 }}, {new: true}
-        );
-
-        const updatedUser= await Users.findByIdAndUpdate(
-            userId, {$addToSet: {joinedCommunities: commID}}, {new: true}
-        )
-        console.log("Updated user:", updatedUser);
-        res.status(200).json({message: 'sucessfully joined community'})
-    }
-    catch(error){
-        console.error('Error joining community:', error);
-        res.status(500).json({ error: 'Failed to join community' });
-    }
-});
-
-app.post('/communities/:id/leave', async (req, res) => {
-    const {id: commID} = req.params;
-    const {userId} = req.body;
-
-    try{
-        await Community.findByIdAndUpdate(
-            commID, {$pull: { members: userId }, $inc: { memberCount: -1 }}, {new: true}
-        );
-
-        await Users.findByIdAndUpdate(
-            userId, {$pull: {joinedCommunities: commID}}, {new: true}
-        )
-
-        res.status(200).json({message: 'sucessfully left community'})
-    }
-    catch(error){
-        console.error('Error leaving community:', error);
-        res.status(500).json({ error: 'Failed to leave community' });
     }
 });
 
