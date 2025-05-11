@@ -91,10 +91,22 @@ export default function WelcomePage() {
         try{
             const response = await axios.post('http://127.0.0.1:8000/login', {email, password});
 
+            const {
+                displayName,
+                email: userEmail,
+                _id: userId,
+                reputation,
+                role,
+                createdAt
+              } = response.data;
+
             const userInfo = {
-                username: response.data.displayName, 
-                role: response.data.isAdmin || 'user',
-                userId: response.data.id 
+                username: displayName, 
+                role,
+                userId, 
+                reputation,
+                email: userEmail,
+                createdAt
             };
 
             console.log("Login successful:", response.data);
