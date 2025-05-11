@@ -24,7 +24,7 @@ export function UserProvider({ children }) {
           reputation: userData.reputation,
           isAdmin:   userData.isAdmin,
           createdAt: userData.createdAt,
-          email: userData.email
+          email: userData.email,
           joinedCommunities: userData.joinedCommunities || [],
         });
       };
