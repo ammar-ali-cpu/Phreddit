@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUser } from "./UserContext";
 
 function checkForLinks(text) {
 
@@ -58,11 +59,11 @@ function checkForLinks(text) {
       return {error, newText};
     }
 
-export default function NewCommentPage({postID, parentCommentID, setCurrentPage}) {
+export default function NewCommentPage({postID, parentCommentID, setCurrentPage, editCommentID}) {
   
   const [content,setContent] = useState("");
-  const [author,setAuthor] = useState("");
   const [errors,setErrors] = useState({});
+  const {user} = useUser();
 
   const checkForErrors = () => {
     
@@ -74,12 +75,17 @@ export default function NewCommentPage({postID, parentCommentID, setCurrentPage}
         errors.content = "500 characters max for content.";
     }
 
-    if (author === "") {     
-        errors.author = "A username is required.";
-    }
 
     return errors;
   };
+
+  useEffect(() => {
+    
+  axios
+    .get(`http://127.0.0.1:8000/comments/${editCommentID}`)
+    .then(({ data }) => setContent(data.content))
+    .catch(console.error);
+  }, [editCommentID]);
 
   const onSubmit = async function() {
 
@@ -102,16 +108,29 @@ export default function NewCommentPage({postID, parentCommentID, setCurrentPage}
     }
 
     try {
-      await axios.post("http://127.0.0.1:8000/comments", {
-        content: newText,
-        commentedBy: author,
-        parentType,
-        parentID: parentCommentID || postID
-      });
-      
-      setCurrentPage(`postPage:${postID}`);
+
+      if (editCommentID) {
+  
+        await axios.put(
+          `http://127.0.0.1:8000/comments/${editCommentID}`,
+          {content: newText}
+        );
+       
+        setCurrentPage("profilePage");
+
+      } else {
+        
+        await axios.post("http://127.0.0.1:8000/comments", {
+          content: newText,
+          commentedBy: user.username,
+          parentType,
+          parentID: parentCommentID || postID,
+          userId: user.userId
+        });
+        setCurrentPage(`postPage:${postID}`);
+      }
     } catch (err) {
-        console.log("Client side problem with new comments.")
+      console.log("Client side problem with new comments.")
     }
   };
 
@@ -129,10 +148,6 @@ export default function NewCommentPage({postID, parentCommentID, setCurrentPage}
     <label className="newComLabels">Comment</label>
     <textarea id="commentCont" value={content} onChange={e => setContent(e.target.value)}/>
     {errors.content && <p className="error">{errors.content}</p>}
-
-    <label className="newComLabels">Username</label>
-    <input id="user" type="text" value={author} onChange={e => setAuthor(e.target.value)}/>
-    {errors.author && <p className="error">{errors.author}</p>}
     </form>
 
     <button id="newComSubmit" type="submit" form="newCommentForm"> Submit Comment</button>
