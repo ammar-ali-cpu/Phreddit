@@ -11,7 +11,7 @@ export default function ProfilePage({ setCurrentPage }) {
 
 
 useEffect(() => {
-
+  console.log("user.userId:", user.userId);
   axios
     .get(`http://127.0.0.1:8000/users/${user.userId}/profile`)
     .then(({ data }) => {

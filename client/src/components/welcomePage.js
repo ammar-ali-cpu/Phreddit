@@ -107,7 +107,7 @@ export default function WelcomePage() {
                 userId, 
                 reputation,
                 email: userEmail,
-                createdAt
+                createdAt,
 
                 username: response.data.displayName, 
                 role: response.data.isAdmin || 'user',
