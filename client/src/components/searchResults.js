@@ -2,11 +2,13 @@ import PostList from './postList.js';
 import React, { useState, useEffect } from "react";
 import { sortActive, sortNewest, sortOldest } from './utils.js';
 import axios from 'axios';
+import { useUser } from './UserContext.js';
 
 export default function SearchResults({searchTerm, setCurrentPage, selectedPost}) {
   const [matchingPosts, setMatchingPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
+  const {user} = useUser();
 
 
   useEffect(() => {
@@ -39,18 +41,30 @@ export default function SearchResults({searchTerm, setCurrentPage, selectedPost}
           setMatchingPosts(sortNewest(filteredPosts)); 
         }
       }, [searchTerm, allPosts]);
-  
+
+      const joined = user?.joinedCommunities || [];
+      let joinedPosts = matchingPosts.filter(post => joined.includes(post.communityID));
+      let otherPosts = matchingPosts.filter(post => !joined.includes(post.communityID));  
   
     const handleSortNewest = () => {
-      setMatchingPosts(prevPosts => sortNewest([...prevPosts])); 
+      joinedPosts = sortNewest(joinedPosts);
+      otherPosts = sortNewest(otherPosts);
+      setMatchingPosts([...joinedPosts, ...otherPosts]);
+      //setMatchingPosts(prevPosts => sortNewest([...prevPosts])); 
     };
   
     const handleSortOldest = () => {
-      setMatchingPosts(prevPosts => sortOldest([...prevPosts])); 
+      joinedPosts = sortOldest(joinedPosts);
+      otherPosts = sortOldest(otherPosts);
+      setMatchingPosts([...joinedPosts, ...otherPosts]);
+      //setMatchingPosts(prevPosts => sortOldest([...prevPosts])); 
     };
   
     const handleSortActive = () => {
-      setMatchingPosts(prevPosts => sortActive([...prevPosts], comments)); 
+      joinedPosts = sortActive(joinedPosts);
+      otherPosts = sortActive(otherPosts);
+      setMatchingPosts = ([...joinedPosts, ...otherPosts]);
+      //setMatchingPosts(prevPosts => sortActive([...prevPosts], comments)); 
     };
 
   return (
@@ -65,7 +79,26 @@ export default function SearchResults({searchTerm, setCurrentPage, selectedPost}
       </div>
       <p className='searchResultLength'>{matchingPosts.length} Posts</p>
       <hr className="solid" />
-      <PostList posts={matchingPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+      {/* <PostList posts={matchingPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/> */}
+      {user?.role === "guest" ? (
+        <PostList posts={matchingPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost} />
+      ) : (
+        <>
+          {joinedPosts.length > 0 && (
+            <>
+              <h4 className="postSectionHeader">Posts from My Communities</h4>
+              <PostList posts={joinedPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+            </>
+          )}
+          <hr className="solid"/>
+          {otherPosts.length > 0 && (
+            <>
+              <h4 className="postSectionHeader">Other Posts</h4>
+              <PostList posts={otherPosts} setCurrentPage={setCurrentPage} selectedPost={selectedPost}/>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }
