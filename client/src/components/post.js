@@ -55,7 +55,7 @@ export default function Post({post, com, setCurrentPage}) {
         <h3 className='postTitle'>{post.title}</h3>
         {flairObj && <p className='flair'>{flairObj.content}</p>}
         <p className='first80' dangerouslySetInnerHTML={{ __html: post.content.substring(0, 80) + "..." }} />
-        <p className='viewAndComment'>{post.votes} votes &nbsp;&nbsp;&nbsp;&nbsp; {post.views} views   &nbsp;&nbsp;&nbsp;&nbsp;   {post.commentIDs.length} comments</p>
+        <p className='viewAndComment'>{post.voteCount} votes &nbsp;&nbsp;&nbsp;&nbsp; {post.views} views   &nbsp;&nbsp;&nbsp;&nbsp;   {post.commentIDs.length} comments</p>
 
     </div>
   
