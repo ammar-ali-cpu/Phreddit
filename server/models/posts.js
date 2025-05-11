@@ -39,6 +39,14 @@ const postSchema = new Schema({
         required: true,
         default: 0
     },
+    voteCount: {
+        type: Number,
+        default: 0
+      },
+      voters: [{
+        userId: { type: Schema.Types.ObjectId, ref: 'Users', required: true},
+        vote: { type: Number, required: true, validate: { validator: v => v === 1 || v === -1,}}
+      }],
 },
 {
     toJSON: { virtuals: true },
