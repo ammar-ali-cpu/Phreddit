@@ -762,3 +762,13 @@ color: red;
   padding: 10px;
   vertical-align: middle;
 }
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
