@@ -56,7 +56,7 @@ const Header = ({ currentPage, setCurrentPage, setSearchTerm }) => {
 
       <div className='headerButtons'>
         <div className='userProfileB'>
-          <button type="button" className="userProfileButton">
+          <button type="button" className="userProfileButton" onClick={() => setCurrentPage('profilePage')}>
             {user?.username ?? "Guest"}
           </button>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useUser } from "./UserContext";
 
 function checkForLinks(text) {
 
@@ -58,23 +59,34 @@ function checkForLinks(text) {
       return {error, newText};
     }
 
-export default function CreatePostPage({ communities, setCurrentPage }) {
-
+export default function CreatePostPage({ communities, setCurrentPage,  editPostID }) {
+  
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [postedBy, setPostedBy] = useState("");
   const [selectedCom, setSelectedCom] = useState("");
   const [flairs, setFlairs] = useState([]);
   const [existingFlair, setExistingFlair] = useState("");
   const [newFlair, setNewFlair] = useState("");
   const [errors, setErrors] = useState({});
+  const { user } = useUser(); 
+  
+
+  
+  useEffect(() => {
+
+    axios
+      .get(`http://127.0.0.1:8000/posts/${editPostID}`)
+      .then(({ data }) => {setTitle(data.title); setBody(data.content); setSelectedCom(data.communityID); setExistingFlair(data.linkFlairID || "");})
+      .catch(err => console.error('Erro with edits', err));
+  }, [editPostID]);
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/flairs')
+      .get("http://127.0.0.1:8000/flairs")
       .then(res => setFlairs(res.data))
       .catch(err => console.error('Error fetching flairs:', err));
-  }, []); 
+  }, []);
+
 
   const checkForErrors = () => {
     const errors = {};
@@ -91,10 +103,6 @@ export default function CreatePostPage({ communities, setCurrentPage }) {
 
     if (body === "") {
         errors.body = "Body is required";
-    }
-
-    if (postedBy === "") {
-        errors.postedBy = "A username is required";
     }
 
     if (newFlair && newFlair.length > 30) {
@@ -116,29 +124,45 @@ export default function CreatePostPage({ communities, setCurrentPage }) {
       return setErrors(prev => ({ ...prev, bodyLink: linkError}));
     }
 
-    try {
-      let flairID = existingFlair;
-     
-      if (!existingFlair && newFlair) {
-        const { data: flair } = await axios.post(
-          "http://127.0.0.1:8000/linkflairs",
-          { content: newFlair }
-        );
+  let flairID = existingFlair || undefined;
 
-        flairID = flair._id;
-        setFlairs(prev => [...prev, flair]);
-      }
+  if (!existingFlair && newFlair) {
+    const { data: flair } = await axios.post(
+      "http://127.0.0.1:8000/linkflairs",
+      { content: newFlair }
+    );
+    flairID = flair._id;
+    setFlairs((prev) => [...prev, flair]);
+  }
 
-      const { data: post } = await axios.post(
-        "http://127.0.0.1:8000/posts",
-        {
-          title,
-          content: newText,
-          postedBy,
-          communityID: selectedCom,
-          linkFlairID: flairID
-        }
-      );
+  const b = {
+    title,
+    content: newText,
+    postedBy: user.username,
+    communityID: selectedCom,
+    userId: user.userId
+  };
+  
+
+
+
+  if (flairID) {
+    b.linkFlairID = flairID;
+  }
+
+let response;
+
+  try {
+
+    if (editPostID) {
+
+  response = await axios.put(
+    `http://127.0.0.1:8000/posts/${editPostID}`,b
+
+    );
+} else {
+
+  response = await axios.post("http://127.0.0.1:8000/posts", b);
 
      
     setCurrentPage(`postPage:${post._id}`);
@@ -146,8 +170,16 @@ export default function CreatePostPage({ communities, setCurrentPage }) {
     
 } catch (er) {
     console.log("Client side problem with posts")
+
 }
-  };
+  
+const saved = response.data;
+
+    setCurrentPage(`postPage:${saved._id}`);
+  } catch (err) {
+    console.log("Client side problem with posts")
+  }
+    };
 
   return (
 
@@ -177,12 +209,6 @@ export default function CreatePostPage({ communities, setCurrentPage }) {
     <label className="newPostLabels" htmlFor="postContent">Body</label>
     <textarea id="postContent" value={body} onChange={e => setBody(e.target.value)}/>
     {errors.body && <p className="error">{errors.body}</p>}
-    </div>
-
-    <div className="form-group">
-    <label className="newPostLabels" htmlFor="postUsername"> Posted by</label>
-    <input id="postUsername" type="text" value={postedBy} onChange={e => setPostedBy(e.target.value)}/>
-    {errors.postedBy && <p className="error">{errors.postedBy}</p>}
     </div>
 
     <div className="form-group">
