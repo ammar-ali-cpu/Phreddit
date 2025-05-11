@@ -73,7 +73,8 @@ app.get('/communities/:id', async (req, res) => {
             name,
             description,
             members: [creatorId],     
-            postIDs: []           
+            postIDs: [],
+            createdBy: creatorId           
         });
 
       const saved = await community.save();
