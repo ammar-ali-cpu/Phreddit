@@ -101,12 +101,19 @@ export default function WelcomePage() {
               } = response.data;
 
             const userInfo = {
+
                 username: displayName, 
                 role,
                 userId, 
                 reputation,
                 email: userEmail,
                 createdAt
+
+                username: response.data.displayName, 
+                role: response.data.isAdmin || 'user',
+                userId: response.data.id, 
+                joinedCommunities: response.data.joinedCommunities
+
             };
 
             console.log("Login successful:", response.data);

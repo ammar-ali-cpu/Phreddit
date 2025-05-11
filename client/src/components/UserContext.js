@@ -13,6 +13,7 @@ export function UserProvider({ children }) {
       username: null,
       userId: null,
       reputation: 0,
+      joinedCommunities: [],
     });
     const login = (userData) => {
         setUser({
@@ -24,6 +25,7 @@ export function UserProvider({ children }) {
           isAdmin:   userData.isAdmin,
           createdAt: userData.createdAt,
           email: userData.email
+          joinedCommunities: userData.joinedCommunities || [],
         });
       };
     
@@ -33,6 +35,7 @@ export function UserProvider({ children }) {
           role: 'guest',
           username: null,
           userId: null,
+          joinedCommunities: [],
         });
       };
     

@@ -145,6 +145,7 @@ export default function CreatePostPage({ communities, setCurrentPage,  editPostI
   
 
 
+
   if (flairID) {
     b.linkFlairID = flairID;
   }
@@ -162,6 +163,14 @@ let response;
 } else {
 
   response = await axios.post("http://127.0.0.1:8000/posts", b);
+
+     
+    setCurrentPage(`postPage:${post._id}`);
+    console.log('created')
+    
+} catch (er) {
+    console.log("Client side problem with posts")
+
 }
   
 const saved = response.data;

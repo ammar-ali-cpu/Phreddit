@@ -39,6 +39,7 @@ const postSchema = new Schema({
         required: true,
         default: 0
     },
+
     voteCount: {
         type: Number,
         default: 0
@@ -47,6 +48,19 @@ const postSchema = new Schema({
         userId: { type: Schema.Types.ObjectId, ref: 'Users', required: true},
         vote: { type: Number, required: true, validate: { validator: v => v === 1 || v === -1,}}
       }],
+
+    votes:{
+        type: Number,
+        required: true,
+        default: 0
+    },
+    communityID:{
+        type: Schema.Types.ObjectId,
+        ref: 'Community',
+        //required: true,
+    },
+    
+
 },
 {
     toJSON: { virtuals: true },
