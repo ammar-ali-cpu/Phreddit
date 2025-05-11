@@ -7,6 +7,7 @@ import PostPage from './postPage.js';
 import NewCommunityPage from './createComPage.js';
 import CreatePostPage from "./createPostPage.js";
 import NewCommentPage from "./newCommentPage.js";
+import ProfilePage from './profilePage.js';
 
   
 export default function Content({ currentPage, setCurrentPage, pageProps, searchTerm }) {
@@ -43,6 +44,15 @@ if (currentPage === "createPostPage") {
   );
 }
 
+if (currentPage === 'profilePage') {
+
+  return (
+  <div className="content">
+    <ProfilePage setCurrentPage={setCurrentPage}/>
+    </div>
+  );
+}
+
 
 if (currentPage.startsWith("newCommentPage:")) {
 
@@ -68,6 +78,40 @@ if (currentPage.startsWith('postPage:')) {
 
 }
 
+
+if (currentPage.startsWith("editPost:")) {
+  
+  const postID = currentPage.split(":")[1];
+  
+  return (
+    <div className="content">
+      <CreatePostPage communities={communities} setCurrentPage={setCurrentPage} editPostID={postID}/>
+    </div>
+  );
+}
+
+if (currentPage.startsWith("editCommunity:")) {
+  
+  const communityID = currentPage.split(":")[1];
+  
+  return (
+    <div className="content">
+      <NewCommunityPage communities={communities} setCommunities={setCommunities} setCurrentPage={setCurrentPage} editCommunityID={communityID}/>
+    </div>
+  );
+}
+
+
+if (currentPage.startsWith("editComment:")) {
+  
+  const commentID = currentPage.split(":")[1];
+  
+  return (
+    <div className="content">
+      <NewCommentPage postID={null} parentCommentID={null} editCommentID={commentID} setCurrentPage={setCurrentPage}/>
+    </div>
+  );
+}
  
   const community = communities.find(c => c._id === currentPage);
 
