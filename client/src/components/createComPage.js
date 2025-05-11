@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUser } from "./UserContext";
 
 function checkForLinks(text) {
 
@@ -60,12 +61,23 @@ function checkForLinks(text) {
     }
   
 
-export default function NewCommunityPage({ setCurrentPage, communities, setCommunities }) {
+export default function NewCommunityPage({ setCurrentPage, communities, setCommunities, editCommunityID }) {
     
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [creator, setCreator] = useState('');
   const [errors, setErrors] = useState({});
+
+  const { user } = useUser();
+  const creatorId = user.userId;      
+  
+  useEffect(() => {
+
+    axios
+      .get(`http://127.0.0.1:8000/communities/${editCommunityID}`)
+      .then(({ data }) => { setName(data.name); setDescription(data.description);})
+      .catch(console.error);
+  }, [editCommunityID]);
+
 
   const checkForErrors = () => {
 
@@ -83,8 +95,10 @@ export default function NewCommunityPage({ setCurrentPage, communities, setCommu
         errors.description = '500 characters max for the Description';
     }
 
-    if (creator === "") {
-        errors.creator = 'A username is required';
+    const sameName = communities.find(c => c.name.toLowerCase() === name.toLowerCase() && c._id !== editCommunityID);
+    
+    if (sameName) {
+      errors.name = "That community name is already taken";
     }
 
     return errors;
@@ -105,19 +119,41 @@ export default function NewCommunityPage({ setCurrentPage, communities, setCommu
     }
 
     try {
+      
+    if (editCommunityID) {
 
-      const { data: newComm } = await axios.post(
-        'http://127.0.0.1:8000/communities',
-        { name, description: newText, creator }
-      );
+    const { data: newCommunity } = await axios.put(
+    `http://127.0.0.1:8000/communities/${editCommunityID}`,
+    { name, description }
+    );
+
+    setCommunities(prev => prev.map(c => {
+    if (c._id === newCommunity._id) {
+      return newCommunity
+    } else {
+      return c
+    }
+}
+))
+    
+  setCurrentPage('profilePage');
+  
+  } else {
+
+  const { data: newComm } = await axios.post(
+    'http://127.0.0.1:8000/communities',
+     { name, description, creatorId }
+    );
 
       setCommunities([...communities, newComm ]);
       setCurrentPage(newComm._id); 
 
-    } catch (er) {
+      }
+    } catch (err) {
       console.log("Client side problem with new communities")
     }
   };
+
 
 
   return (
@@ -135,10 +171,6 @@ export default function NewCommunityPage({ setCurrentPage, communities, setCommu
     <textarea id="communityDescription" placeholder="500 characters max" value={description} onChange={e=>setDescription(e.target.value)} />
     {errors.description && <p className="error">{errors.description}</p>}
     {errors.descLink && <p className="error">{errors.descLink}</p>}
-
-    <label className="newComLabels">Username</label>
-    <input id="creatorUsername" value={creator} onChange={e=>setCreator(e.target.value)} />
-    {errors.creator && <p className="error">{errors.creator}</p>}
 
     <button id="newComSubmit" type="submit">Engender Community</button>
     </form>
