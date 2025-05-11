@@ -101,6 +101,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (community && community.createdBy) {
+    console.log("Fetching creator for:", community.createdBy); 
     axios
     .get(`http://127.0.0.1:8000/users/${community.createdBy}`)
     .then(res => setCreator(res.data))

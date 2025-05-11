@@ -726,6 +726,20 @@ app.get('/users', async (req, res) => {
 
 });
 
+app.get('/users/:id', async (req, res) => {
+    try {
+      const user = await Users.findById(req.params.id).lean();
+      if (!user) return res.sendStatus(404);
+      res.json({
+        _id: user._id,
+        displayName: user.displayName,   
+      });
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
+    }
+  });
+
 
 app.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
