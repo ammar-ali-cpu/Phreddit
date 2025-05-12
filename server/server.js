@@ -799,7 +799,8 @@ app.delete('/users/:id', async (req, res) => {
 
 
 
-app.listen(8000, () => {console.log("Server listening on port 8000...");});
+const server = app.listen(8000, () => console.log("Server listening on port 8000..."));
+module.exports = server;
 
 process.on('SIGINT', async () => {
     await mongoose.disconnect();
