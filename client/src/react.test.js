@@ -1,19 +1,17 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Header from './Header';
+import Header from './components/header';
+import { useUser } from './components/UserContext';
 
-// Mock UserContext
-jest.mock('./UserContext', () => ({
+jest.mock('./components/UserContext', () => ({
   useUser: jest.fn(),
 }));
-
-import { useUser } from './UserContext';
 
 describe('Create Post Button access', () => {
   const mockSetCurrentPage = jest.fn();
   const mockSetSearchTerm = jest.fn();
 
-  test('Create Post button is disabled for guest user (role = "guest")', () => {
+  test('disables Create Post button for guest user', () => {
     useUser.mockReturnValue({
       user: { role: 'guest', username: 'Guest' },
       logout: jest.fn()
@@ -28,13 +26,12 @@ describe('Create Post Button access', () => {
     );
 
     const buttonDiv = screen.getByText('Create Post').parentElement;
-
     expect(buttonDiv).toHaveClass('guest-disabled');
   });
 
-  test('Create Post button is enabled for registered user (role = "user")', () => {
+  test('enables Create Post button for registered user', () => {
     useUser.mockReturnValue({
-      user: { role: 'user', username: 'testuser' },
+      user: { role: 'user', username: 'Alice' },
       logout: jest.fn()
     });
 
@@ -47,7 +44,6 @@ describe('Create Post Button access', () => {
     );
 
     const buttonDiv = screen.getByText('Create Post').parentElement;
-
     expect(buttonDiv).not.toHaveClass('guest-disabled');
   });
 });
