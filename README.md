@@ -37,6 +37,7 @@ In the sections below, list and describe each contribution briefly.
 - Upvote/Downvote
 - New Community Page view 
 - New Post Page view
+- Admin Profile Page View
 - New Comment page view
 - User profile page view (for user vs admin mode)
 - Editing user created posts, comments, and communtiies
