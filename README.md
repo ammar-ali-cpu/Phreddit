@@ -4,15 +4,20 @@
 Add design docs in *images/*
 
 ## Instructions to setup and run project
-Clearly explain the steps required to install and configure necessary packages,
-for both the server and the client, and the sequence of steps required to get
-your application running.
+To install all packages, run npm install in both the server and client directories
+Initialize the database by running node server/init.js, adding the first name, last name, display name, email, and password for the admin account, respectively. Make sure the database is running.
+To start the project, run node server/server.js to start the server on localhost 8000.
+Then, run npm start in your client directory (cd client) to load the website on localhost 3000.
+This should successfully run the project.
+To run jest unit tests, enter the command npm test (in either the client or server directories).
+
 
 
 In the sections below, list and describe each contribution briefly.
 
-## Team Member 1 Contribution
-<Team Member 1 Name>
+## Ammar Ali Contribution
+- 
 
-## Team Member 2 Contribution
+
+## Joshua Jacob Contribution
 <Team Member 2 Name>
