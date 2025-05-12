@@ -63,7 +63,7 @@ export default function SearchResults({searchTerm, setCurrentPage, selectedPost}
     const handleSortActive = () => {
       joinedPosts = sortActive(joinedPosts);
       otherPosts = sortActive(otherPosts);
-      setMatchingPosts = ([...joinedPosts, ...otherPosts]);
+      setMatchingPosts([...joinedPosts, ...otherPosts]);
       //setMatchingPosts(prevPosts => sortActive([...prevPosts], comments)); 
     };
 
