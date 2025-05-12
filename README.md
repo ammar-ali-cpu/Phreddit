@@ -16,8 +16,29 @@ To run jest unit tests, enter the command npm test (in either the client or serv
 In the sections below, list and describe each contribution briefly.
 
 ## Ammar Ali Contribution
-- 
+- UML diagrams (class, sequence, and state machine)
+- Password hashing using bcrypt
+- Welcome page
+- Account Registration process
+- Login page (including logout process)
+- Guest Mode
+- Banner adjustments and feature access control (for user vs guest mode)
+- navigation bar adjustments (for user vs guest mode)
+- Home page view adjustments (for user vs guest mode)
+- Community Page view adjustments (for user vs guest mode)
+- Joining/leaving communities
+- Search Results adjustments (for user vs guest mode)
+- User schema and related updates
+- Unit test 3
 
 
 ## Joshua Jacob Contribution
-<Team Member 2 Name>
+- Post Page view (for user vs guest mode)
+- Upvote/Downvote
+- New Community Page view 
+- New Post Page view
+- New Comment page view
+- User profile page view (for user vs admin mode)
+- Editing user created posts, comments, and communtiies
+- Schema updates to account for user privileges
+- Unit test 1 and 2
