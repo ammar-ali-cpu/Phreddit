@@ -1,8 +1,6 @@
 
 # Term Project
 
-Add design docs in *images/*
-
 ## Instructions to setup and run project<br>
 To install all packages, run npm install in both the server and client directories. <br>
 If bcrypt did not install run npm install bcrypt.<br>
